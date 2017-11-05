@@ -415,6 +415,12 @@ FSTRINGVAR(tEPRSegmentsPerSecondPrint)
 FSTRINGVAR(tEPRSegmentsPerSecondTravel)
 #endif
 
+// XKY
+FSTRINGVAR(tAutoLeveingGcode)
+FSTRINGVAR(tAutoSetEndstopOffsetGcode)
+FSTRINGVAR(tNozzleCloseHotbed)
+// XKY END
+
 static void config(FSTRINGPARAM(text));
 static void config(FSTRINGPARAM(text),int value);
 static void config(FSTRINGPARAM(text),const char *msg);

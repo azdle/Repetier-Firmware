@@ -536,6 +536,10 @@ inline void memcopy4(void *dest,void *source) {
 #define Z_ACCELERATION_TOP 0
 #endif
 
+#ifndef ACCELERATION_FACTOR_TOP
+#define ACCELERATION_FACTOR_TOP 0
+#endif
+
 #ifndef KEEP_ALIVE_INTERVAL
 #define KEEP_ALIVE_INTERVAL 2000
 #endif

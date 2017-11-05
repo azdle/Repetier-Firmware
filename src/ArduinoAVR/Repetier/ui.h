@@ -242,6 +242,11 @@
 #define UI_ACTION_LANGUAGE_TR           1710
 #define UI_ACTION_LANGUAGE_FI           1711
 
+// xky
+#define UI_ACTION_DELTA_ROD              1301
+#define UI_ACTION_DELTA_RADIUS           1302
+// xky END
+
 #define UI_ACTION_MENU_XPOS             4000
 #define UI_ACTION_MENU_YPOS             4001
 #define UI_ACTION_MENU_ZPOS             4002
@@ -278,6 +283,16 @@
 #define UI_ACTION_WIZARD_JAM_REHEAT      5001
 #define UI_ACTION_WIZARD_JAM_WAITHEAT    5002
 #define UI_ACTION_WIZARD_JAM_EOF         5003
+
+// xky
+#define UI_ACTION_RUN_AUTO_LEVEING        6001
+#define UI_ACTION_NOZZLE_CLOSE_HOTBED     6004
+#define UI_ACTION_AUTO_SET_ENDSTOP_OFFSET 6005
+#define UI_ACTION_SET_Z_AIXS_TO_ZERO      6006
+#define UI_ACTION_X_ENDSTOP_OFFSET        6016
+#define UI_ACTION_Y_ENDSTOP_OFFSET        6017
+#define UI_ACTION_Z_ENDSTOP_OFFSET        6018
+// xky END
 
 // Load basic language definition to make sure all values are defined
 //#include "uilang.h"

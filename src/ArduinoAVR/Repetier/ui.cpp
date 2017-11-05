@@ -898,7 +898,7 @@ void UIDisplay::printRow(uint8_t r,char *txt,char *txt2,uint8_t changeAtCol)
     if(highlight)
     {
         u8g_SetColorIndex(&u8g,1);
-        u8g_draw_box(&u8g, 0, y + 1, u8g_GetWidth(&u8g), UI_FONT_HEIGHT + 1);
+        u8g_draw_box(&u8g, 0, y , u8g_GetWidth(&u8g), UI_FONT_HEIGHT + 2);  //xky edit
         u8g_SetColorIndex(&u8g, 0);
     }
     char c;
@@ -1410,6 +1410,11 @@ void UIDisplay::parse(const char *txt,bool ram)
 #if DRIVE_SYSTEM != DELTA
             else if(c2 == 'J') addFloat(Printer::maxZJerk, 3, 1);
 #endif
+            else if(c2 == 'k') addFloat(EEPROM::deltaDiagonalRodLength(), 3, 1);
+            else if(c2 == 'l') addFloat(EEPROM::deltaHorizontalRadius(), 3, 1);
+            else if(c2 == 'o') addInt(EEPROM::deltaTowerXOffsetSteps(), 3);
+            else if(c2 == 'p') addInt(EEPROM::deltaTowerYOffsetSteps(), 3);
+            else if(c2 == 'q') addInt(EEPROM::deltaTowerZOffsetSteps(), 3);
             break;
 		case 'B':
             if(c2 == 'C')	 //Custom coating
@@ -2978,6 +2983,71 @@ ZPOS2:
     case UI_ACTION_MAX_JERK:
         INCREMENT_MIN_MAX(Printer::maxJerk,0.1,1,99.9);
         break;
+
+  //after code add by xky	    **************************************************
+    case UI_ACTION_DELTA_ROD:
+        float b;
+        b = EEPROM::deltaDiagonalRodLength();
+        INCREMENT_MIN_MAX(b,0.1,0.1,999.9);
+        HAL::eprSetFloat(EPR_DELTA_DIAGONAL_ROD_LENGTH, b);
+        Com::printFLN(PSTR("Delta Rod set to: "),b,3);
+        Printer::updateDerivedParameter();
+        break;
+    case UI_ACTION_DELTA_RADIUS:
+        float a;
+        a = EEPROM::deltaHorizontalRadius();
+        INCREMENT_MIN_MAX(a,0.1,0.1,999.9);
+        HAL::eprSetFloat(EPR_DELTA_HORIZONTAL_RADIUS, a);
+        Com::printFLN(PSTR("Delta Radius set to: "),a,3);
+        Printer::radius0 = a;
+        Printer::updateDerivedParameter();
+        break;
+    case UI_ACTION_X_ENDSTOP_OFFSET:       //ADJUST ENDSTOP OFFSET  ADD FOR XKY
+        float c;
+        c = EEPROM::deltaTowerXOffsetSteps();
+        INCREMENT_MIN_MAX(c,1,0.1,9999);
+        EEPROM::setDeltaTowerXOffsetSteps(c);
+        Com::printFLN(PSTR("X Endstop Offset: "),c,3);
+        Printer::updateDerivedParameter();
+        break;
+    case UI_ACTION_Y_ENDSTOP_OFFSET:      //ADJUST ENDSTOP OFFSET  ADD FOR XKY
+        float d;
+        d = EEPROM::deltaTowerYOffsetSteps();
+        INCREMENT_MIN_MAX(d,1,0,9999);
+        EEPROM::setDeltaTowerYOffsetSteps(d);
+        Com::printFLN(PSTR("Y Endstop Offset: "),d,3);
+        Printer::updateDerivedParameter();
+        break;
+    case UI_ACTION_Z_ENDSTOP_OFFSET:      //ADJUST ENDSTOP OFFSET  ADD FOR XKY
+        float e;
+        e = EEPROM::deltaTowerZOffsetSteps();
+        INCREMENT_MIN_MAX(e,1,0,9999);
+        EEPROM::setDeltaTowerZOffsetSteps(e);
+        Com::printFLN(PSTR("Z Endstop Offset: "),e,3);
+        Printer::updateDerivedParameter();
+        break;
+    case UI_ACTION_SET_Z_AIXS_TO_ZERO:    //this function about set z aixs to hotbed it can save data
+        Printer::setNoDestinationCheck(false);
+        Commands::printCurrentPosition(PSTR("UI_ACTION_ZPOSITION "));
+        Printer::updateCurrentPosition();
+        //add by xky can not save if not adjust z height
+        if (Printer::currentPosition[Z_AXIS] < -10 || Printer::currentPosition[Z_AXIS] > 10 || Printer::currentPosition[Z_AXIS] == 0) {
+            UI_STATUS("Err:Adjust Z Hight");
+            break;
+        }
+        Printer::zLength -= Printer::currentPosition[Z_AXIS];
+        Printer::currentPositionSteps[Z_AXIS] = 0;
+        Printer::updateDerivedParameter();
+        transformCartesianStepsToDeltaSteps(Printer::currentPositionSteps, Printer::currentNonlinearPositionSteps);
+        Printer::updateCurrentPosition(true);
+        Com::printFLN(Com::tZProbePrinterHeight, Printer::zLength);
+#if EEPROM_MODE != 0
+        EEPROM::storeDataIntoEEPROM(false);
+        Com::printFLN(Com::tEEPROMUpdated);
+#endif
+        Commands::printCurrentPosition(PSTR("UI_ACTION_SET_MEASURED_ORIGIN "));
+        break;
+
 #if DRIVE_SYSTEM != DELTA
     case UI_ACTION_MAX_ZJERK:
         INCREMENT_MIN_MAX(Printer::maxZJerk,0.1,0.1,99.9);
@@ -3764,6 +3834,20 @@ int UIDisplay::executeAction(unsigned int action, bool allowMoves)
 #if EEPROM_MODE != 0
             EEPROM::storeDataIntoEEPROM(0); // remember for next start
 #endif
+            break;
+        case UI_ACTION_RUN_AUTO_LEVEING:
+            GCode::executeFString(Com::tAutoLeveingGcode);
+            break;
+        case UI_ACTION_NOZZLE_CLOSE_HOTBED:
+            #if Z_HOME_DIR > 0
+            Printer::homeAxis(true, true,true);
+            #else
+            Printer::homeAxis(true, true, false);
+            #endif
+            GCode::executeFString(Com::tNozzleCloseHotbed);
+            break;
+        case UI_ACTION_AUTO_SET_ENDSTOP_OFFSET:
+            GCode::executeFString(Com::tAutoSetEndstopOffsetGcode);
             break;
         }
     refreshPage();

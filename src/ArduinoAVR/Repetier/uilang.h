@@ -16,6 +16,17 @@
 
 */
 
+// xky
+#define UI_TEXT_AUTO_LEVEING "Auto Leveling"
+#define UI_TEXT_NOZZLE_TO_HOTBED "Test Leveling"
+#define UI_TEXT_DELTA_ROD "Delta Rod:%ak"
+#define UI_TEXT_DELTA_RADIUS "Delta Radius:%al"
+#define UI_TEXT_SET_ENDSTOP_OFFSET "Set Ends. Offset"
+#define UI_TEXT_X_ENDSTOP_OFFSET "X End. Off:%ao"
+#define UI_TEXT_Y_ENDSTOP_OFFSET "Y End. Off:%ap"
+#define UI_TEXT_Z_ENDSTOP_OFFSET "Z End. Off:%aq"
+// END xky
+
 #if !defined(UI_DISPLAY_CHARSET) || UI_DISPLAY_CHARSET > 3
 #define UI_DISPLAY_CHARSET 1
 #endif
@@ -2168,7 +2179,7 @@
 #define UI_TEXT_HOME_Z_SE           "K" STR_ouml "r hem Z"
 #define UI_TEXT_PREHEAT_PLA_SE      "F" STR_ouml "rv" STR_auml "rm f" STR_ouml "r PLA"
 #define UI_TEXT_PREHEAT_ABS_SE      "F" STR_ouml "rv" STR_auml "rm f" STR_ouml "r ABS"
-#define UI_TEXT_LIGHTS_ONOFF_SE     "Lampor:%lo"
+#define UI_TEXT_LIGHTS_ONOFF_SE     "Lights:%lo"
 #define UI_TEXT_COOLDOWN_SE         "Kyl ner"
 #define UI_TEXT_SET_TO_ORIGIN_SE    "S"  STR_auml "tt som origo"
 #define UI_TEXT_DISABLE_STEPPER_SE  "St" STR_auml "ng av stegmotor"
@@ -2256,7 +2267,7 @@
 #define UI_TEXT_ACTION_ZPOSITION_FAST4C_SE "Max " STR_auml "ndl" STR_auml "ge:%sZ"
 #define UI_TEXT_ACTION_ZPOSITION_FAST4D_SE ""
 #define UI_TEXT_ACTION_EPOSITION_FAST2A_SE "E:%x3 mm"
-#define UI_TEXT_ACTION_EPOSITION_FAST2B_SE "Ett klick = 1 mm"
+#define UI_TEXT_ACTION_EPOSITION_FAST2B_SE "1 click = 1 mm"
 #define UI_TEXT_ACTION_XPOSITION2A_SE "X:%x0 mm"
 #define UI_TEXT_ACTION_XPOSITION2B_SE "Min:%sx Max:%sX"
 #define UI_TEXT_ACTION_YPOSITION2A_SE "Y:%x1 mm"
@@ -2362,7 +2373,7 @@
 #define UI_TEXT_WIZ_WAITTEMP1_SE "V" STR_auml "nta pa"
 #define UI_TEXT_WIZ_WAITTEMP2_SE "maltemperaturer ..."
 #define UI_TEXT_EXTRUDER_JAM_SE "Extruder tr" STR_auml "ngsel"
-#define UI_TEXT_STANDBY_SE "Vilar"
+#define UI_TEXT_STANDBY_SE "Standby"
 #define UI_TEXT_BED_COATING_SE "B" STR_auml "ddbel" STR_auml "ggning"
 #define UI_TEXT_BED_COATING_SET1_SE "B" STR_auml "ddbel" STR_auml "ggning:"
 #define UI_TEXT_BED_COATING_SET2_SE ""

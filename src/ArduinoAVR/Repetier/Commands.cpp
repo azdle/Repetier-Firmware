@@ -860,6 +860,38 @@ extern bool runBedLeveling(GCode *com);
 void Commands::processGCode(GCode *com) {
     uint32_t codenum; //throw away variable
     switch(com->G) {
+// XKY
+        case 301: // G301
+            Printer::homeAxis(true, true,true);
+            GCode::executeFString(Com::tNozzleCloseHotbed);
+            break;
+        case 302: // G302
+        case 303: // G303
+            Printer::setNoDestinationCheck(true);
+            PrintLine::moveRelativeDistanceInStepsReal(0, 0, ((com->G == 302 ? 10 : -10) * Printer::axisStepsPerMM[Z_AXIS]) / 100, 0, Printer::homingFeedrate[Z_AXIS],false);
+            Printer::setNoDestinationCheck(false);
+            Commands::printCurrentPosition(PSTR("UI_ACTION_ZPOSITION "));
+            break;
+        case 304: // G304
+            Printer::updateCurrentPosition();
+            if (Printer::currentPosition[Z_AXIS] < -10 || Printer::currentPosition[Z_AXIS] > 10 || Printer::currentPosition[Z_AXIS]  == 0  ) {
+                UI_STATUS_UPD("Err:Adjust Z Hight");
+                break;
+            }
+
+            Printer::zLength -= Printer::currentPosition[Z_AXIS];
+            Printer::currentPositionSteps[Z_AXIS] = 0;
+            Printer::updateDerivedParameter();
+            transformCartesianStepsToDeltaSteps(Printer::currentPositionSteps, Printer::currentNonlinearPositionSteps);
+            Printer::updateCurrentPosition(true);
+            Com::printFLN(Com::tZProbePrinterHeight, Printer::zLength);
+            #if EEPROM_MODE != 0
+                EEPROM::storeDataIntoEEPROM(false);
+                Com::printFLN(Com::tEEPROMUpdated);
+            #endif
+            Commands::printCurrentPosition(PSTR("UI_ACTION_SET_MEASURED_ORIGIN "));
+            break;
+// XKY END
         case 0: // G0 -> G1
         case 1: // G1
 #if defined(SUPPORT_LASER) && SUPPORT_LASER
@@ -1175,6 +1207,7 @@ void Commands::processGCode(GCode *com) {
                     Extruder::setTemperatureForExtruder(actTemp[Extruder::current->id], Extruder::current->id, false, actTemp[Extruder::current->id] > MAX_ROOM_TEMPERATURE);
 #endif
 #endif
+                    Printer::homeAxis(false, false, true);
                 }
             }
             break;
