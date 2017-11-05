@@ -574,7 +574,7 @@ If your EXT0_PID_MAX is low, you should prefer the second method.
 
 Uncomment define to force the temperature into the range for given watch period.
 */
-//#define TEMP_HYSTERESIS 5
+#define TEMP_HYSTERESIS 0
 
 /** Userdefined thermistor table
 
@@ -1307,23 +1307,23 @@ instead of driving them with a single stepper. The same works for the other axis
 */
 
 #define FEATURE_TWO_XSTEPPER 0
-#define X2_STEP_PIN   E1_STEP_PIN
-#define X2_DIR_PIN    E1_DIR_PIN
+#define X2_STEP_PIN   ORIG_E1_STEP_PIN
+#define X2_DIR_PIN    ORIG_E1_DIR_PIN
 #define X2_ENABLE_PIN E1_ENABLE_PIN
 
 #define FEATURE_TWO_YSTEPPER 0
-#define Y2_STEP_PIN   E1_STEP_PIN
-#define Y2_DIR_PIN    E1_DIR_PIN
+#define Y2_STEP_PIN   ORIG_E1_STEP_PIN
+#define Y2_DIR_PIN    ORIG_E1_DIR_PIN
 #define Y2_ENABLE_PIN E1_ENABLE_PIN
 
 #define FEATURE_TWO_ZSTEPPER 0
-#define Z2_STEP_PIN   E1_STEP_PIN
-#define Z2_DIR_PIN    E1_DIR_PIN
+#define Z2_STEP_PIN   ORIG_E1_STEP_PIN
+#define Z2_DIR_PIN    ORIG_E1_DIR_PIN
 #define Z2_ENABLE_PIN E1_ENABLE_PIN
 
 #define FEATURE_THREE_ZSTEPPER 0
-#define Z3_STEP_PIN   E2_STEP_PIN
-#define Z3_DIR_PIN    E2_DIR_PIN
+#define Z3_STEP_PIN   ORIG_E2_STEP_PIN
+#define Z3_DIR_PIN    ORIG_E2_DIR_PIN
 #define Z3_ENABLE_PIN E2_ENABLE_PIN
 
 /* Ditto printing allows 2 extruders to do the same action. This effectively allows
@@ -1395,7 +1395,7 @@ to recalibrate z.
 #define Z_PROBE_WAIT_BEFORE_TEST 0
 /** Speed of z-axis in mm/s when probing */
 #define Z_PROBE_SPEED 2
-#define Z_PROBE_XY_SPEED 150
+#define Z_PROBE_XY_SPEED 120
 #define Z_PROBE_SWITCHING_DISTANCE 2 // Distance to safely switch off probe after it was activated
 #define Z_PROBE_REPETITIONS 3 // Repetitions for probing at one point.
 /** Distance between nozzle and bed when probe triggers. */
@@ -1454,7 +1454,7 @@ motorized bed leveling */
    The same 3 points are used for the G29 command.
 */
 #define FEATURE_AUTOLEVEL 1
-#define Z_PROBE_X1 -116.19
+#define Z_PROBE_X1 -116.91
 #define Z_PROBE_Y1 -67.5
 #define Z_PROBE_X2 116.91
 #define Z_PROBE_Y2 -67.5
@@ -1663,8 +1663,8 @@ computations, so do not enable it if your display works stable!
 //#define TRY_AUTOREPAIR_LCD_ERRORS
 
 // This is line 2 of the status display at startup. Change to your like.
-#define UI_PRINTER_NAME "Hatchbox Alpha"
-#define UI_PRINTER_COMPANY "Unofficial (By Patrick Barrett)"
+#define UI_PRINTER_NAME "HB Alpha"
+#define UI_PRINTER_COMPANY "Unofficial"
 
 
 /** Animate switches between menus etc. */
